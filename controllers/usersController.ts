@@ -11,7 +11,7 @@ export const findAllUsers= async(req: Request, res: Response)=>{
        const result: IUser[]= await UserModel.find()
             .limit(Number(limit))
             .skip(Number(skip));
-            res.json(result);
+           res.json(result);
 };
 
 //neg shirhegiig avah

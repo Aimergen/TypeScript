@@ -20,8 +20,27 @@ const countAllMovies = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.countAllMovies = countAllMovies;
 //bugdiin avah
 const findAllMovies = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limit = '10', skip = '0' } = req.query;
-    const result = yield movieModel_1.default.find()
+    const { limit = '10', skip = '0', ordering = "releasedAsc" } = req.query;
+    let sort = "";
+    switch (ordering) {
+        case 'releasedDesc':
+            sort = "-released";
+            break;
+        case 'imdbRatingDesc':
+            sort = "-awards.wins";
+            break;
+        case 'titleAsc':
+            sort = "title";
+            break;
+        case 'titleDesc':
+            sort = "-title";
+            break;
+        default:
+            sort = 'released';
+            break;
+    }
+    const result = yield movieModel_1.default.find({})
+        .sort(sort)
         .limit(Number(limit))
         .skip(Number(skip));
     res.json(result);

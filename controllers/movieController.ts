@@ -7,9 +7,30 @@ export const countAllMovies =async (req:Request, res: Response) => {
 
 //bugdiin avah
 export const findAllMovies= async(req: Request, res: Response)=>{
-       const {limit ='10', skip = '0'}= req.query;
-       const result: IMovie[]= await MovieModel.find()
-       .limit(Number(limit))
+       const {limit ='10', skip = '0', ordering="releasedAsc"}= req.query;
+
+        let sort = "";
+        switch (ordering) {
+            case 'releasedDesc':
+                sort ="-released";
+                break;
+            case 'imdbRatingDesc':
+                sort ="-awards.wins";
+                break; 
+            case 'titleAsc':
+                    sort ="title";
+                    break;    
+            case 'titleDesc':
+                        sort ="-title";
+                        break;
+            default:
+                sort = 'released';
+                break;            
+        }
+
+       const result: IMovie[]= await MovieModel.find({})
+            .sort(sort)
+            .limit(Number(limit))
             .skip(Number(skip));
             res.json(result);
 };
